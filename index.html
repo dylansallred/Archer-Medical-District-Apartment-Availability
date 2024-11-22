@@ -1042,7 +1042,28 @@ function getLayoutImageUrl(layoutName) {
     return 'https://placehold.co/697';
 }
 
-// Add these new functions near the top of your script
+// Add these new functions for data persistence
+function saveLastCheckedUnits(units) {
+    try {
+        localStorage.setItem('lastCheckedUnits', JSON.stringify(units));
+        localStorage.setItem('lastCheckTimestamp', new Date().toISOString());
+    } catch (error) {
+        console.error('Error saving last checked units:', error);
+    }
+}
+
+function getLastCheckedUnits() {
+    try {
+        const units = JSON.parse(localStorage.getItem('lastCheckedUnits') || '[]');
+        const timestamp = localStorage.getItem('lastCheckTimestamp');
+        return { units, timestamp };
+    } catch (error) {
+        console.error('Error loading last checked units:', error);
+        return { units: [], timestamp: null };
+    }
+}
+
+// Modify the fetchAndCompareUnits function
 async function fetchAndCompareUnits(currentUnits) {
     try {
         const newUnits = await fetchUnits();
@@ -1057,6 +1078,7 @@ async function fetchAndCompareUnits(currentUnits) {
         if (currentUnits.length === 0 || 
             Math.abs(newUnits.length - currentUnits.length) > Math.max(currentUnits.length, newUnits.length) * 0.5) {
             console.warn('Large difference in unit counts detected, skipping comparison');
+            saveLastCheckedUnits(newUnits); // Save the new state
             return newUnits;
         }
 
@@ -1098,10 +1120,11 @@ async function fetchAndCompareUnits(currentUnits) {
         if (changes.length > 0) {
             updateChangeHistory(changes);
             displayUnits(filterAndSortUnits(newUnits));
-            return newUnits;
         }
         
-        return currentUnits;
+        // Save the new state
+        saveLastCheckedUnits(newUnits);
+        return newUnits;
     } catch (error) {
         console.error('Error fetching updated data:', error);
         return currentUnits;
@@ -1424,8 +1447,73 @@ async function init() {
         loader.classList.remove('hidden');
         unitsContainer.style.display = 'none';
         
+        // Get the last checked units
+        const { units: lastCheckedUnits, timestamp: lastCheckTimestamp } = getLastCheckedUnits();
+        
+        // Fetch new units
         currentUnits = await fetchUnits();
         
+        // If we have last checked units, compare with current units
+        if (lastCheckedUnits.length > 0) {
+            // Compare units and check if there were any changes
+            const changes = [];
+            
+            // Check for removed units
+            lastCheckedUnits.forEach(lastUnit => {
+                if (!currentUnits.some(newUnit => newUnit.name === lastUnit.name)) {
+                    changes.push({
+                        type: 'removed',
+                        unit: lastUnit
+                    });
+                }
+            });
+            
+            // Check for added units
+            currentUnits.forEach(newUnit => {
+                if (!lastCheckedUnits.some(lastUnit => lastUnit.name === newUnit.name)) {
+                    changes.push({
+                        type: 'added',
+                        unit: newUnit
+                    });
+                }
+            });
+            
+            // Check for price changes
+            currentUnits.forEach(newUnit => {
+                const lastUnit = lastCheckedUnits.find(unit => unit.name === newUnit.name);
+                if (lastUnit && newUnit.displayPrice !== lastUnit.displayPrice) {
+                    changes.push({
+                        type: 'price',
+                        name: newUnit.name,
+                        oldPrice: lastUnit.displayPrice,
+                        newPrice: newUnit.displayPrice
+                    });
+                }
+            });
+
+            // Only show last check toast if there were actual changes
+            if (changes.length > 0 && lastCheckTimestamp) {
+                const lastCheck = new Date(lastCheckTimestamp);
+                const timeDiff = Math.floor((new Date() - lastCheck) / (1000 * 60)); // minutes
+                
+                showToast({
+                    type: 'added',
+                    unit: {
+                        name: 'Last Check',
+                        bedrooms: timeDiff < 60 
+                            ? `${timeDiff} minutes ago`
+                            : `${Math.floor(timeDiff / 60)} hours ${timeDiff % 60} minutes ago`
+                    }
+                });
+
+                // Update history with the changes
+                updateChangeHistory(changes);
+            }
+        }
+
+        // Save current state
+        saveLastCheckedUnits(currentUnits);
+
         // Add event listeners for filtering and sorting
         const filterElements = ['search', 'bedrooms', 'bathrooms', 'sort'];
         filterElements.forEach(elementId => {
@@ -1540,7 +1628,7 @@ function setupGallery() {
             galleryGrid.style.display = 'grid';
             popupInfo.style.display = 'none';
             galleryButton.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M120-120v-560h160v-160h400v320h160v400H520v-160h-80v160H120Zm80-80h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 480h80v-80h-80v80Zm0-160h80v-80h-80v80Z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M120-120v-560h160v-160h400v320h160v400H520v-160h-80v160H120Zm80-80h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Z"/></svg>
                 View Units
             `;
         } else {
