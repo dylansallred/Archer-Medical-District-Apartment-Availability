@@ -25,7 +25,7 @@
         }
 
         .container, .controls, .unit-card, .popup-overlay, .popup-content, .gallery-image, .gallery-button {
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
+            transition: box-shadow 2s ease, transform 0.3s ease;
         }
 
         .container {
@@ -75,18 +75,18 @@
             gap: 20px;
         }
 
-        .unit-card, .gallery-image {
+        .unit-card {
             display: flex;
             background-color: #2d2d2d;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 1px 10px 10px 0px rgba(0, 0, 0, 0.2), inset 0px 0px 0px 1px #4d4d4d;
             height: 200px;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        .unit-card:hover, .gallery-image:hover{
+        .unit-card:hover {
             transform: translateY(-2.5px);
-            box-shadow: 1px 13px 20px 0px rgb(0 0 0);
-            border: .5px solid #cf994b;
+            box-shadow: 1px 13px 20px 0px rgb(0 0 0), inset 0px 0px 0px 0.5px #cf994b;
         }
 
         .unit-info {
