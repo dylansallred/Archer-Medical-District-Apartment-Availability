@@ -13,6 +13,19 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
+            background-image: url('archerlogobg.png');
+            background-repeat: repeat;
+            background-size: 70px;
+            
+        }
+
+        .controls, .unit-card, .logo img, .popup-overlay, .popup-content, .gallery-image, .gallery-button {
+            border-radius: 8px;
+            box-shadow: -1px 10px 10px 0px #00000047;
+        }
+
+        .container, .controls, .unit-card, .popup-overlay, .popup-content, .gallery-image, .gallery-button {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
         }
 
         .container {
@@ -20,68 +33,65 @@
             margin: 0 auto;
             position: relative;
             z-index: 1;
+            border-radius: 8px;
+            padding: 20px;
         }
 
-        .controls {
+        .controls, .gallery-button {
             background-color: #2d2d2d;
+            border: 1px solid #4d4d4d;
+            color: #cf994b;
             padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: -1px 10px 10px 0px #00000047;
         }
 
-        .controls-row {
+        .controls-row, .settings-group.checkbox-group {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
             align-items: center;
         }
 
-        input, select {
+        input, select, .settings-group input[type="color"] {
             background-color: #3d3d3d;
             border: 1px solid #4d4d4d;
             color: white;
             padding: 5px;
-            margin-right: 0px;
-            margin-left: -5px;
             border-radius: 4px;
             box-shadow: 4px 1px 5px #00000036;
+            font-size: .8em;
         }
 
-        .grid {
+        input:focus, select:focus {
+            outline: none;
+            border: 1px solid #cf994b;
+        }
+
+        .grid, .gallery-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
 
-        .unit-card {
+        .unit-card, .gallery-image {
             display: flex;
-            gap: 15px;
-            padding: 15px;
             background-color: #2d2d2d;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            cursor: pointer;
             border: 1px solid rgba(255, 255, 255, 0.1);
             height: 200px;
             overflow: hidden;
-            box-shadow: -1px 10px 10px 0px #00000047;
         }
 
-        .unit-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            background-color: #333333;
-            box-shadow: 0px 0 0px 1px #4caf50, 0px 0 10px #4caf50;
+        .unit-card:hover, .gallery-image:hover{
+            transform: translateY(-2.5px);
+            box-shadow: 1px 13px 20px 0px rgb(0 0 0);
+            border: .5px solid #cf994b;
         }
 
         .unit-info {
             flex: 0 0 auto;
-            min-width: 180px;
+            padding: 15px;
         }
 
         .unit-info h3 {
@@ -91,7 +101,17 @@
             font-weight: 100;
             position: relative;
         }
-        .unit-info h3::after {
+
+        .popup-info h3{
+            margin: 10px 0 5px 0;
+            font-size: 1.1rem;
+            color: #ffffff;
+            font-weight: 100;
+            position: relative;
+
+        }
+
+        .popup-info h3::after,.unit-info h3::after {
             content: '';
             position: absolute;
             bottom: -1px;
@@ -100,8 +120,9 @@
             height: 1px;
             background: linear-gradient(to right, #ffffff, transparent);
         }
-        .price {
-            font-size: 1.5em;
+
+        .unit-price {
+            font-size: 1.3em;
             font-weight: bold;
             color: #cf994b;
             margin: 6px 0;
@@ -114,20 +135,17 @@
         }
 
         .stats {
-            display: flex;
-            gap: 3px;  /* Reduced gap */
             color: #bbbbbb;
-            flex-wrap: wrap;
-            line-height: 1em;  /* Reduced line height */
+            line-height: 1em;
         }
 
         .stats span {
             background-color: rgba(255, 255, 255, 0.05);
-            padding: 4px 8px;  /* Reduced padding */
-            border-radius: 4px;  /* Smaller border radius */
-            font-size: 0.7rem;  /* Smaller font */
-            letter-spacing: -0.2px;  /* Reduced character spacing */
-            white-space: nowrap;  /* Prevent wrapping within stats */
+            padding: 4px 4px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
         }
 
         .available, .occupied {
@@ -151,7 +169,7 @@
 
         .logo {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 20px;
@@ -159,7 +177,7 @@
         }
 
         .logo img {
-            max-width: 200px;
+            max-width: 150px;
             border-radius: 8px;
             transition: transform 0.3s ease;
             box-shadow: -1px 10px 10px 0px #00000047;
@@ -196,9 +214,7 @@
         .unit-layout img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Changed from contain to cover */
-            border-radius: 10px;
-            transition: transform 0.3s ease;
+            object-fit: fill;
         }
 
         .popup-overlay {
@@ -208,40 +224,54 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
         }
 
         .popup-overlay.active {
             display: flex;
         }
 
-        .popup-overlay img {
+        .popup-overlay img, .popup-content img {
             max-width: 90%;
             max-height: 90vh;
-            border-radius: 8px;
         }
 
         .popup-content {
-            background-color: #2d2d2d;
-            padding: 20px;
-            border-radius: 12px;
-            max-width: 90%;
-            max-height: 90vh;
+            background-color: transparent;
+            padding: 0;
+            max-width: 95%;
+            max-height: 95vh;
             display: flex;
             flex-direction: column;
         }
 
         .popup-content img {
-            max-width: 100%;
-            max-height: 70vh;
+            max-width: 95%;
+            max-height: 95vh;
+            object-fit: contain;
+        }
+
+        .popup-content img.unit-view {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .popup-content img.gallery-view {
             border-radius: 8px;
         }
 
         .popup-info {
             color: white;
+            display: none;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .popup-info.show-info {
+            display: block;
         }
 
         .loader-container {
@@ -277,22 +307,26 @@
             padding: 6px 12px;
             display: none;
         }
+
+        .available-count .available-now {
+            color: #4CAF50;
+        }
+
+        .available-count .bullet {
+            color: #888;
+            margin: 0 6px;
+        }
+
+        .available-count .total-available {
+            color: #cf994b;
+        }
+
         .subtitle-divider {
             height: 20px;
             width: 1px;
             background: linear-gradient(to bottom, transparent, #ffffff2e, transparent);
             margin-left: 5px;
             margin-right: 3px;
-        }
-
-        #particles-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
         }
 
         .settings-panel {
@@ -306,7 +340,6 @@
             color: white;
             z-index: 1000;
             min-width: 250px;
-            box-shadow: -1px 10px 10px 0px #00000047;
             display: none;
         }
 
@@ -328,7 +361,6 @@
         .settings-group input[type="range"] {
             width: 100%;
             height: 1px;
-
         }
 
         .settings-group .value-display {
@@ -369,18 +401,6 @@
             display: none;
         }
 
-        .settings-group.checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .settings-group.checkbox-group label {
-            margin-bottom: 0;
-            cursor: pointer;
-        }
-
         .settings-group.checkbox-group input[type="checkbox"] {
             cursor: pointer;
             width: 16px;
@@ -388,93 +408,350 @@
             accent-color: #cf994b;
         }
 
-        .settings-group input[type="color"] {
-            width: 50px;
-            height: 25px;
-            padding: 0 2px;
-            border: none;
-            border-radius: 4px;
-            background: none;
+        .gallery-container {
+            display: none;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
             cursor: pointer;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: -1px 10px 10px 0px #00000047;
         }
 
-        .settings-group input[type="color"]::-webkit-color-swatch-wrapper {
-            padding: 0;
+        .gallery-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         }
 
-        .settings-group input[type="color"]::-webkit-color-swatch {
-            border: none;
+        .gallery-button {
+            background-color: #2d2d2d;
+            border: 1px solid #4d4d4d;
+            color: #cf994b;
+            padding: 5px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            flex-direction: row;
+        }
+
+        .gallery-button:hover {
+            background-color: #292822;
+            box-shadow: inset 0px 0px 5px 0px #cf994b5c, 0 0px 10px rgba(0, 0, 0, .5);
+        }
+        #search {
+            width: 100px;
+        }
+
+        .popup-info {
+            display: block;
+            padding: 0px 15px 15px 15px;
+            background: #222;
+        }
+
+        .history-panel {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(45, 45, 45, 0.99);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            transition: right 0.3s ease;
+            z-index: 999;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+        }
+
+        .history-panel.active {
+            right: 0;
+        }
+
+        .history-panel h3 {
+            color: #cf994b;
+            margin: 0;
+        }
+
+        .history-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            padding-right: 10px;
+            overscroll-behavior: contain;
+        }
+        .history-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .history-item .timestamp {
+            color: #888;
+            font-size: 0.8em;
+            margin-bottom: 8px;
+        }
+
+        .history-item .change-type {
+            display: inline-block;
+            padding: 4px 8px;
             border-radius: 4px;
+            font-size: 0.8em;
+            margin-bottom: 8px;
+        }
+
+        .history-item .change-type.price {
+            background: rgba(207, 153, 75, 0.2);
+            color: #cf994b;
+        }
+
+        .history-item .change-type.added {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+        }
+
+        .history-item .change-type.removed {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+        }
+
+        .history-item .price-change {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 5px 0;
+        }
+
+        .history-item .price-change .arrow {
+            color: #cf994b;
+        }
+
+        .history-item .percent-change {
+            color: #4CAF50;
+        }
+
+        .history-item .percent-change.negative {
+            color: #ff4444;
+        }
+
+        .history-toggle {
+            background: #cf994b;
+            border: none;
+            color: white;
+            padding: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 0px 5px 0px #00000087;
+        }
+
+        .history-toggle:hover {
+            background: #b88339;
+            box-shadow: inset 0px 0px 5px #ffd08f;
+        }
+
+        .history-item .unit-header {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 5px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 5px;
+            padding: 7px 0;
+            border-radius: 50px;
+            width: fit-content;
+            background: rgb(2,0,36);
+            background: linear-gradient(180deg, rgba(2,0,36,0) 0%, rgba(207,153,75,0) 23%, rgba(207,153,75,1) 25%, rgba(207,153,75,0) 27%, rgba(138,103,90,0) 35%, rgba(207,153,75,1) 37%, rgba(86,65,102,0) 39%, rgba(9,9,119,0) 48%, rgba(207,153,75,1) 50%, rgba(9,17,126,0) 52%, rgba(86,70,106,0) 60%, rgba(207,153,75,1) 62%, rgba(138,106,92,0) 64%, rgba(207,153,75,0) 73%, rgba(207,153,75,1) 75%, rgba(207,153,75,0) 77%, rgba(0,212,255,0) 100%); 
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: rgba(45, 45, 45, 0.90);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateX(-100%);
+            transition: all 0.5s ease;
+            max-width: 300px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.price {
+            border-left: 4px solid #cf994b;
+        }
+
+        .toast.added {
+            border-left: 4px solid #4CAF50;
+        }
+
+        .toast.removed {
+            border-left: 4px solid #ff4444;
+        }
+
+        .toast-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+
+        .toast-content {
+            font-size: 0.9em;
+            color: #bbbbbb;
+        }
+
+        .toast .percent-change {
+            color: #4CAF50;  /* Default green for positive changes */
+        }
+
+        .toast .percent-change.negative {
+            color: #ff4444;  /* Red for negative changes */
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .delete-history {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: all 0.3s ease;
+        }
+
+        .delete-history:hover {
+            background: rgba(255, 68, 68, 0.3);
+            box-shadow: 0 0 5px rgba(255, 68, 68, 0.3);
+        }
+
+        .confirm-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .confirm-popup.active {
+            display: flex;
+        }
+
+        .confirm-content {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 300px;
+            text-align: center;
+        }
+
+        .confirm-content h4 {
+            color: #ff4444;
+            margin: 0 0 15px 0;
+        }
+
+        .confirm-content p {
+            color: #bbbbbb;
+            margin: 0 0 20px 0;
+            font-size: 0.9em;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .confirm-button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-button.cancel {
+            background: #3d3d3d;
+            color: #ffffff;
+        }
+
+        .confirm-button.cancel:hover {
+            background: #4d4d4d;
+        }
+
+        .confirm-button.delete {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+
+        .confirm-button.delete:hover {
+            background: rgba(255, 68, 68, 0.3);
+            box-shadow: 0 0 5px rgba(255, 68, 68, 0.3);
         }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <canvas id="particles-background"></canvas>
-    <button class="settings-toggle">Settings</button>
-    <div class="settings-panel">
-        <h3>Particle Settings</h3>
-        <div class="settings-group">
-            <label>Number of Pyramids</label>
-            <input type="range" id="numPyramids" min="5" max="100" step="1">
-            <div class="value-display"></div>
+   
+    <div class="history-panel">
+        <div class="history-header">
+            <h3>Change History</h3>
+            <button class="delete-history">Clear History</button>
         </div>
-        <div class="settings-group">
-            <label>Rotation Speed</label>
-            <input type="range" id="rotationSpeed" min="0.001" max="0.05" step="0.001">
-            <div class="value-display"></div>
-        </div>
-        <div class="settings-group">
-            <label>Movement Speed</label>
-            <input type="range" id="movementSpeed" min="0.001" max="0.01" step="0.001">
-            <div class="value-display"></div>
-        </div>
-        <div class="settings-group">
-            <label>Opacity</label>
-            <input type="range" id="opacity" min="0.1" max="1" step="0.1">
-            <div class="value-display"></div>
-        </div>
-        <div class="settings-group">
-            <label>Distribution Range</label>
-            <input type="range" id="distribution" min="4" max="20" step="1">
-            <div class="value-display"></div>
-        </div>
-        <div class="settings-group">
-            <label>Pyramid Size</label>
-            <input type="range" id="pyramidSize" min="0.05" max="0.3" step="0.01">
-            <div class="value-display"></div>
-        </div>
-        <div class="settings-group">
-            <label>Mouse Sensitivity</label>
-            <input type="range" id="mouseSensitivity" min="0.01" max="0.2" step="0.01">
-            <div class="value-display"></div>
-        </div>
-        <div class="settings-group">
-            <label>Scene Rotation Speed</label>
-            <input type="range" id="sceneRotationSpeed" min="0.01" max="0.2" step="0.01">
-            <div class="value-display"></div>
-        </div>
-        <div class="settings-group">
-            <label>Fade In Duration (ms)</label>
-            <input type="range" id="fadeInDuration" min="500" max="5000" step="100">
-            <div class="value-display"></div>
-        </div>
-        <div class="settings-group">
-            <label>Color</label>
-            <input type="color" id="particleColor" value="#cf994b">
-            <div class="value-display"></div>
-        </div>
-        <div class="settings-group checkbox-group">
-            <input type="checkbox" id="autoRotate" checked>
-            <label for="autoRotate">Auto Rotate Scene</label>
-        </div>
-        <div class="settings-group checkbox-group">
-            <input type="checkbox" id="toggleContainer" checked>
-            <label for="toggleContainer">Show Content</label>
-        </div>
-        <div class="current-values"></div>
+        <div class="history-content"></div>
     </div>
+    
     <div class="container">
+
         <div class="logo">
             <a href="https://archermedicaldistrict.com">
                 <img src="https://capi.myleasestar.com/v2/dimg/106094399/400x400/106094399.jpg" alt="Apartment Logo">
@@ -486,7 +763,7 @@
         </div>
         <div class="controls">
             <div class="controls-row">
-                <input type="text" id="search" placeholder="Search by unit number...">
+                <input type="text" id="search" placeholder="Search by unit #">
                 <div class="subtitle-divider"></div>
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M80-200v-240q0-27 11-49t29-39v-112q0-50 35-85t85-35h160q23 0 43 8.5t37 23.5q17-15 37-23.5t43-8.5h160q50 0 85 35t35 85v112q18 17 29 39t11 49v240h-80v-80H160v80H80Zm440-360h240v-80q0-17-11.5-28.5T720-680H560q-17 0-28.5 11.5T520-640v80Zm-320 0h240v-80q0-17-11.5-28.5T400-680H240q-17 0-28.5 11.5T200-640v80Zm-40 200h640v-80q0-17-11.5-28.5T760-480H200q-17 0-28.5 11.5T160-440v80Zm640 0H160h640Z"/></svg>
                 <select id="bedrooms">
@@ -503,21 +780,39 @@
                 </select>
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M120-240v-80h240v80H120Zm0-200v-80h480v80H120Zm0-200v-80h720v80H120Z"/></svg>
                 <select id="sort">
-                    <option value="price-asc">Price: Low to High</option>
-                    <option value="price-desc">Price: High to Low</option>
+                    <option value="price-asc">$ : Low to High</option>
+                    <option value="price-desc">$ : High to Low</option>
                     <option value="available" selected>Available Date</option>
-                    <option value="size">Size</option>
+                    <option value="size">Size (sqft)</option>
                 </select>
                 <div class="subtitle-divider"></div>
                 <div id="availableCount" class="available-count"></div>
+               
             </div>
             
+        </div>
+        <div class="buttons-container">
+           
+            <button id="galleryButton" class="gallery-button">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L560-480 440-320l-80-120-120 160Zm-40 80v-560 560Z"/>
+                </svg>
+                View Gallery
+            </button>
+            <button class="history-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="#e8eaed">
+                    <path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77t76.5 114T840-480q0 75-28.5 140.5t-77 114t-114 76.5T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/>
+                </svg>
+            </button>
         </div>
         <div class="loader-container" id="loader">
             <div class="loader"></div>
         </div>
         <div id="units" class="grid">
             <!-- Units will be populated here -->
+        </div>
+        <div id="galleryGrid" class="gallery-container">
+            <!-- Gallery images will be populated here -->
         </div>
     </div>
     <div class="popup-overlay" id="imagePopup">
@@ -526,9 +821,18 @@
             <div class="popup-info" id="popupInfo"></div>
         </div>
     </div>
+    <div class="confirm-popup" id="confirmPopup">
+        <div class="confirm-content">
+            <h4>Clear History</h4>
+            <p>Are you sure you want to delete all history? This action cannot be undone.</p>
+            <div class="confirm-buttons">
+                <button class="confirm-button cancel" id="cancelClear">Cancel</button>
+                <button class="confirm-button delete" id="confirmClear">Delete</button>
+            </div>
+        </div>
+    </div>
     <script>
 
-        // Add this new function near the top of your file
 function setupPopup() {
     const popup = document.getElementById('imagePopup');
     const popupImg = document.getElementById('popupImage');
@@ -562,10 +866,18 @@ function formatDate(dateString) {
 function displayUnits(units) {
     const container = document.getElementById('units');
     
-    // Count currently available units
-    const availableNow = units.filter(unit => new Date(unit.availableOn) <= new Date()).length;
+    // Count available units
+    const now = new Date();
+    const availableNow = units.filter(unit => new Date(unit.availableOn) <= now).length;
+    const totalAvailable = units.length;
+    
+    // Update the availability count display with separate spans for different colors
     const availableCountElement = document.getElementById('availableCount');
-    availableCountElement.textContent = `${availableNow} unit${availableNow !== 1 ? 's' : ''} available now`;
+    availableCountElement.innerHTML = `
+        <span class="available-now">${availableNow} available now</span>
+        <span class="bullet">•</span>
+        <span class="total-available">${totalAvailable} total available</span>
+    `;
     availableCountElement.style.display = 'block';
     
     container.innerHTML = units.map(unit => {
@@ -578,7 +890,7 @@ function displayUnits(units) {
             data-unit-info='${JSON.stringify(unit)}'>
             <div class="unit-info">
                 <h3>Unit ${unit.name}</h3>
-                <div class="price">$${unit.displayPrice}</div>
+                <div class="unit-price">$${unit.displayPrice}</div>
                 <div class="stats">
                     <span>${unit.bedrooms ?? '?'} bed</span>
                     <span>${unit.bathrooms ?? '?'} bath</span>
@@ -595,7 +907,7 @@ function displayUnits(units) {
         </div>
     `}).join('');
 
-    // Modify click handlers
+    // Move the event listener setup here, after the cards are created
     document.querySelectorAll('.unit-card').forEach(card => {
         card.addEventListener('click', () => {
             const layoutImage = card.dataset.layoutImage;
@@ -605,13 +917,18 @@ function displayUnits(units) {
                 const popupImg = document.getElementById('popupImage');
                 const popupInfo = document.getElementById('popupInfo');
                 
-                // Clean the layout name for the popup as well
+                popupImg.src = layoutImage;
+                popup.classList.add('active');
+                popupInfo.style.display = 'block';
+                popupImg.classList.add('unit-view');
+                popupImg.classList.remove('gallery-view');
+                
+                // Clean the layout name for the popup
                 const cleanLayoutName = unitInfo.layoutName ? unitInfo.layoutName.replace(/[A-Za-z]$/, '') : 'N/A';
                 
-                popupImg.src = layoutImage;
                 popupInfo.innerHTML = `
                     <h3>Unit ${unitInfo.name}</h3>
-                    <div class="price">$${unitInfo.displayPrice}</div>
+                    <div class="unit-price">$${unitInfo.displayPrice}</div>
                     <div class="stats">
                         <span>${unitInfo.bedrooms ?? '?'} bed</span>
                         <span>${unitInfo.bathrooms ?? '?'} bath</span>
@@ -622,7 +939,6 @@ function displayUnits(units) {
                         Available ${new Date(unitInfo.availableOn) <= new Date() ? 'Now' : `On ${formatDate(unitInfo.availableOn)}`}
                     </div>
                 `;
-                popup.classList.add('active');
             }
         });
     });
@@ -726,277 +1042,522 @@ function getLayoutImageUrl(layoutName) {
     return 'https://placehold.co/697';
 }
 
-// Particle Background
-function initParticleBackground() {
-    const canvas = document.getElementById('particles-background');
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    const pyramids = [];
-    
-    let settings = {
-        numPyramids: 100,
-        rotationSpeed: 0.01,
-        movementSpeed: 0.004,
-        opacity: 1,
-        distribution: 30,
-        showContainer: true,
-        pyramidSize: 0.3,
-        mouseSensitivity: 0.01,
-        sceneRotationSpeed: 0.01,
-        fadeInDuration: 5000,
-        particleColor: '#cf994b',
-        autoRotate: true
-    };
-
-    // Add fade state tracking
-    let currentOpacity = 0;
-    const fadeInDuration = 2000; // 2 seconds
-    const startTime = Date.now();
-
-    function updateParticles() {
-        pyramids.forEach(pyramid => scene.remove(pyramid));
-        pyramids.length = 0;
-
-        for(let p = 0; p < settings.numPyramids; p++) {
-            const pyramidGeometry = new THREE.BufferGeometry();
-            
-            // Scale vertices based on pyramidSize
-            const size = settings.pyramidSize;
-            const vertices = new Float32Array([
-                // Front
-                0, size, 0,    // Top
-                -size/2, -size/2, size/2,  // Bottom Left
-                size/2, -size/2, size/2,   // Bottom Right
-                
-                // Right
-                0, size, 0,    
-                size/2, -size/2, size/2,   
-                size/2, -size/2, -size/2,  
-                
-                // Back
-                0, size, 0,    
-                size/2, -size/2, -size/2,  
-                -size/2, -size/2, -size/2, 
-                
-                // Left
-                0, size, 0,    
-                -size/2, -size/2, -size/2, 
-                -size/2, -size/2, size/2,  
-                
-                // Base
-                -size/2, -size/2, size/2,
-                size/2, -size/2, size/2,
-                size/2, -size/2, -size/2,
-                -size/2, -size/2, -size/2
-            ]);
-
-            pyramidGeometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-            
-            const edges = new THREE.EdgesGeometry(pyramidGeometry);
-            const material = new THREE.LineBasicMaterial({ 
-                color: new THREE.Color(settings.particleColor),
-                transparent: true,
-                opacity: 0
-            });
-            
-            const pyramid = new THREE.LineSegments(edges, material);
-
-            // Set initial position
-            pyramid.position.set(
-                (Math.random() - 0.5) * settings.distribution,
-                (Math.random() - 0.5) * settings.distribution,
-                (Math.random() - 0.5) * settings.distribution
-            );
-
-            // Set initial rotation
-            pyramid.rotation.set(
-                Math.random() * Math.PI * 2,
-                Math.random() * Math.PI * 2,
-                Math.random() * Math.PI * 2
-            );
-
-            // Simplified movement parameters
-            pyramid.userData = {
-                rotationSpeed: {
-                    x: (Math.random() - 0.5) * settings.rotationSpeed,
-                    y: (Math.random() - 0.5) * settings.rotationSpeed,
-                    z: (Math.random() - 0.5) * settings.rotationSpeed
-                },
-                direction: new THREE.Vector3(
-                    (Math.random() - 0.5) * settings.movementSpeed,
-                    (Math.random() - 0.5) * settings.movementSpeed,
-                    (Math.random() - 0.5) * settings.movementSpeed
-                )
-            };
-
-            pyramids.push(pyramid);
-            scene.add(pyramid);
-        }
-    }
-
-    function setupSettings() {
-        const panel = document.querySelector('.settings-panel');
-        const toggle = document.querySelector('.settings-toggle');
-        const container = document.querySelector('.container');
-        const toggleContainer = document.getElementById('toggleContainer');
+// Add these new functions near the top of your script
+async function fetchAndCompareUnits(currentUnits) {
+    try {
+        const newUnits = await fetchUnits();
         
-        if (!panel || !toggle || !container || !toggleContainer) {
-            console.error('Required elements not found');
-            return;
+        // Add validation to prevent false removals/additions
+        if (!newUnits || newUnits.length === 0) {
+            console.warn('Received empty units list, skipping comparison');
+            return currentUnits;
         }
 
-        toggle.addEventListener('click', () => {
-            panel.classList.toggle('active');
-        });
-
-        toggleContainer.addEventListener('change', (e) => {
-            container.classList.toggle('hidden', !e.target.checked);
-            settings.showContainer = e.target.checked;
-            updateCurrentValues();
-        });
-
-        settings.showContainer = true;
-
-        Object.keys(settings).forEach(key => {
-            const input = document.getElementById(key);
-            if (!input) return;
-            
-            const display = input.parentElement?.querySelector('.value-display');
-            if (!display) return;
-
-            input.value = settings[key];
-            display.textContent = settings[key];
-
-            input.addEventListener('input', (e) => {
-                settings[key] = parseFloat(e.target.value);
-                display.textContent = settings[key];
-                if (key === 'opacity') {
-                    // For opacity changes, maintain fade progress
-                    currentOpacity = fadeProgress * settings.opacity;
-                }
-                updateParticles();
-                updateCurrentOpacity(); // Apply current fade state
-                updateCurrentValues();
-            });
-        });
-
-        updateCurrentValues();
-    }
-
-    function updateCurrentValues() {
-        const valuesDisplay = document.querySelector('.current-values');
-        valuesDisplay.textContent = 'Current Settings:\n' + 
-            JSON.stringify(settings, null, 2);
-    }
-
-    camera.position.z = 5;
-
-    // Mouse interaction
-    let mouseX = 0;
-    let mouseY = 0;
-    document.addEventListener('mousemove', (event) => {
-        mouseX = (event.clientX - window.innerWidth / 2) * 0.0002;
-        mouseY = (event.clientY - window.innerHeight / 2) * 0.0002;
-    });
-
-    function animate() {
-        requestAnimationFrame(animate);
-
-        const elapsed = Date.now() - startTime;
-        const fadeProgress = Math.min(elapsed / settings.fadeInDuration, 1);
-        currentOpacity = fadeProgress * settings.opacity;
-
-        // Scene rotation based on settings
-        if (settings.autoRotate) {
-            scene.rotation.y += settings.sceneRotationSpeed * 0.01;
+        // Add validation to prevent mass changes
+        if (currentUnits.length === 0 || 
+            Math.abs(newUnits.length - currentUnits.length) > Math.max(currentUnits.length, newUnits.length) * 0.5) {
+            console.warn('Large difference in unit counts detected, skipping comparison');
+            return newUnits;
         }
 
-        // Mouse interaction with sensitivity
-        scene.rotation.x += (mouseY * settings.mouseSensitivity - scene.rotation.x) * settings.sceneRotationSpeed;
-        scene.rotation.y += (mouseX * settings.mouseSensitivity - scene.rotation.y) * settings.sceneRotationSpeed;
-
-        // Update all pyramid opacities
-        pyramids.forEach(pyramid => {
-            pyramid.material.opacity = currentOpacity;
-        });
-
-        // Existing animation code
-        scene.rotation.x += (mouseY - scene.rotation.x) * 0.05;
-        scene.rotation.y += (mouseX - scene.rotation.y) * 0.05;
-
-        pyramids.forEach(pyramid => {
-            pyramid.rotation.x += pyramid.userData.rotationSpeed.x;
-            pyramid.rotation.y += pyramid.userData.rotationSpeed.y;
-            pyramid.rotation.z += pyramid.userData.rotationSpeed.z;
-
-            pyramid.position.add(pyramid.userData.direction);
-
-            if (Math.abs(pyramid.position.x) > settings.distribution) {
-                pyramid.userData.direction.x *= -1;
-            }
-            if (Math.abs(pyramid.position.y) > settings.distribution) {
-                pyramid.userData.direction.y *= -1;
-            }
-            if (Math.abs(pyramid.position.z) > settings.distribution) {
-                pyramid.userData.direction.z *= -1;
+        const changes = [];
+        
+        // Track removed units
+        currentUnits.forEach(currentUnit => {
+            if (!newUnits.some(newUnit => newUnit.name === currentUnit.name)) {
+                changes.push({
+                    type: 'removed',
+                    unit: currentUnit
+                });
             }
         });
-
-        renderer.render(scene, camera);
+        
+        // Track added units
+        newUnits.forEach(newUnit => {
+            if (!currentUnits.some(currentUnit => currentUnit.name === newUnit.name)) {
+                changes.push({
+                    type: 'added',
+                    unit: newUnit
+                });
+            }
+        });
+        
+        // Track price changes
+        newUnits.forEach(newUnit => {
+            const currentUnit = currentUnits.find(unit => unit.name === newUnit.name);
+            if (currentUnit && newUnit.displayPrice !== currentUnit.displayPrice) {
+                changes.push({
+                    type: 'price',
+                    name: newUnit.name,
+                    oldPrice: currentUnit.displayPrice,
+                    newPrice: newUnit.displayPrice
+                });
+            }
+        });
+        
+        if (changes.length > 0) {
+            updateChangeHistory(changes);
+            displayUnits(filterAndSortUnits(newUnits));
+            return newUnits;
+        }
+        
+        return currentUnits;
+    } catch (error) {
+        console.error('Error fetching updated data:', error);
+        return currentUnits;
     }
-
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    setupSettings();
-    updateParticles();
-    animate();
 }
 
-// Modify the init function to setup the popup
+// Add this after your existing JavaScript functions
+function formatTimestamp(date) {
+    return new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    }).format(date);
+}
+
+function calculatePriceChange(oldPrice, newPrice) {
+    const old = parseFloat(oldPrice.replace(/[^0-9.-]+/g, ''));
+    const new_ = parseFloat(newPrice.replace(/[^0-9.-]+/g, ''));
+    const percentChange = ((new_ - old) / old) * 100;
+    return {
+        difference: new_ - old,
+        percent: percentChange.toFixed(1)
+    };
+}
+
+// Add these functions to handle localStorage
+function saveChangeToHistory(change) {
+    try {
+        // Get existing history or initialize empty array
+        const history = JSON.parse(localStorage.getItem('unitChangeHistory') || '[]');
+        
+        // Add timestamp to change object
+        const changeWithTimestamp = {
+            ...change,
+            timestamp: new Date().toISOString()
+        };
+        
+        // Add new change to beginning of array
+        history.unshift(changeWithTimestamp);
+        
+        // Keep only last 100 changes to prevent localStorage from getting too full
+        const trimmedHistory = history.slice(0, 100);
+        
+        // Save back to localStorage
+        localStorage.setItem('unitChangeHistory', JSON.stringify(trimmedHistory));
+        
+        return changeWithTimestamp;
+    } catch (error) {
+        console.error('Error saving to localStorage:', error);
+        return null;
+    }
+}
+
+function loadChangeHistory() {
+    try {
+        const history = JSON.parse(localStorage.getItem('unitChangeHistory') || '[]');
+        return history;
+    } catch (error) {
+        console.error('Error loading from localStorage:', error);
+        return [];
+    }
+}
+
+// Modify the createHistoryItem function to accept a timestamp
+function createHistoryItem(change) {
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    
+    // Create and add unit number header
+    const unitHeader = document.createElement('div');
+    unitHeader.className = 'unit-header';
+    unitHeader.textContent = `Unit ${change.type === 'price' ? change.name : change.unit.name}`;
+    item.appendChild(unitHeader);
+    
+    const timestamp = document.createElement('div');
+    timestamp.className = 'timestamp';
+    // Use the saved timestamp if available, otherwise use current time
+    timestamp.textContent = formatTimestamp(change.timestamp ? new Date(change.timestamp) : new Date());
+    
+    const content = document.createElement('div');
+    content.className = 'stats';
+    
+    if (change.type === 'price') {
+        const priceChange = calculatePriceChange(change.oldPrice, change.newPrice);
+        const changeType = document.createElement('span');
+        changeType.className = 'change-type price';
+        changeType.textContent = 'Price Change';
+        
+        content.innerHTML = `
+            <div class="price-change">
+                <span>$${change.oldPrice}</span>
+                <div class="arrow">→</div> 
+                <span>$${change.newPrice}</span>
+                <span class="percent-change ${priceChange.difference < 0 ? 'negative' : ''}">
+                    (${priceChange.difference < 0 ? '' : '+'}${priceChange.percent}%)
+                </span>
+            </div>
+        `;
+        item.appendChild(changeType);
+    } else if (change.type === 'added' || change.type === 'removed') {
+        const changeType = document.createElement('span');
+        changeType.className = `change-type ${change.type}`;
+        changeType.textContent = change.type === 'added' ? 'New Unit' : 'Removed Unit';
+        
+        content.innerHTML = `
+            <span>${change.unit.bedrooms} bed, ${change.unit.bathrooms} bath</span>
+            <span>${change.unit.area} sqft</span>
+            <span>Price: ${change.unit.displayPrice}</span>
+        `;
+        item.appendChild(changeType);
+    }
+    
+    item.appendChild(timestamp);
+    item.appendChild(content);
+    return item;
+}
+
+function createToastContainer() {
+    const container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+    return container;
+}
+
+function showToast(change) {
+    const container = document.querySelector('.toast-container') || createToastContainer();
+    const toast = document.createElement('div');
+    toast.className = `toast ${change.type}`;
+    
+    let headerText = '';
+    let contentText = '';
+    
+    if (change.type === 'price') {
+        const priceChange = calculatePriceChange(change.oldPrice, change.newPrice);
+        const isNegative = priceChange.difference < 0;
+        headerText = `Price Change - Unit ${change.name}`;
+        contentText = `$${change.oldPrice} → $${change.newPrice} <span class="percent-change ${isNegative ? 'negative' : ''}">(${isNegative ? '' : '+'}${priceChange.percent}%)</span>`;
+    } else if (change.type === 'added') {
+        headerText = `New Unit Available`;
+        contentText = `Unit ${change.unit.name}: ${change.unit.bedrooms}bed/${change.unit.bathrooms}bath - $${change.unit.displayPrice}`;
+    } else if (change.type === 'removed') {
+        headerText = `Unit No Longer Available`;
+        contentText = `Unit ${change.unit.name} has been removed`;
+    }
+    
+    toast.innerHTML = `
+        <div class="toast-header">${headerText}</div>
+        <div class="toast-content">${contentText}</div>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Trigger reflow to ensure animation works
+    toast.offsetHeight;
+    
+    // Show toast
+    setTimeout(() => toast.classList.add('show'), 10);
+    
+    // Remove toast after delay
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 500); // Wait for fade out animation
+    }, 60000); // 60 seconds
+}
+
+function updateChangeHistory(changes) {
+    const historyContent = document.querySelector('.history-content');
+    
+    changes.forEach(change => {
+        // Save change to localStorage and get back the change with timestamp
+        const savedChange = saveChangeToHistory(change);
+        if (savedChange) {
+            const historyItem = createHistoryItem(savedChange);
+            historyContent.insertBefore(historyItem, historyContent.firstChild);
+            
+            // Show toast notification
+            showToast(change);
+        }
+    });
+}
+
+// Modify setupHistoryPanel to load existing history
+function setupHistoryPanel() {
+    const historyToggle = document.querySelector('.history-toggle');
+    const historyPanel = document.querySelector('.history-panel');
+    const historyContent = document.querySelector('.history-content');
+    const deleteButton = document.querySelector('.delete-history');
+    const confirmPopup = document.getElementById('confirmPopup');
+    const cancelClear = document.getElementById('cancelClear');
+    const confirmClear = document.getElementById('confirmClear');
+    
+    // Function to clear history
+    function clearHistory() {
+        // Clear localStorage
+        localStorage.removeItem('unitChangeHistory');
+        
+        // Clear the history content
+        historyContent.innerHTML = '';
+        
+        // Show a toast notification
+        const toast = {
+            type: 'removed',
+            name: 'History cleared',
+            unit: { name: 'All entries removed' }
+        };
+        
+        // Hide the confirmation popup
+        confirmPopup.classList.remove('active');
+    }
+    
+    // Add clear history functionality
+    deleteButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        confirmPopup.classList.add('active');
+    });
+    
+    // Cancel button handler
+    cancelClear.addEventListener('click', (e) => {
+        e.stopPropagation();
+        confirmPopup.classList.remove('active');
+    });
+    
+    // Confirm button handler
+    confirmClear.addEventListener('click', (e) => {
+        e.stopPropagation();
+        clearHistory();
+    });
+    
+    // Close popup when clicking outside of confirm-content
+    confirmPopup.addEventListener('click', (e) => {
+        if (e.target === confirmPopup) {
+            e.stopPropagation();
+            confirmPopup.classList.remove('active');
+        }
+    });
+
+    // Prevent clicks within confirm-content from bubbling
+    document.querySelector('.confirm-content').addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+    
+    // Load and display existing history
+    const existingHistory = loadChangeHistory();
+    existingHistory.forEach(change => {
+        const historyItem = createHistoryItem(change);
+        historyContent.appendChild(historyItem);
+    });
+    
+    // Add click handler for toggle button
+    historyToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        historyPanel.classList.toggle('active');
+    });
+
+    // Add click handler for the panel itself to prevent closing when clicking inside
+    historyPanel.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Add click handler to document to close panel when clicking outside
+    document.addEventListener('click', (e) => {
+        // Only close if we're not clicking within the confirm popup
+        if (!confirmPopup.contains(e.target)) {
+            historyPanel.classList.remove('active');
+        }
+    });
+}
+
+// Modify your init function to include the test
 async function init() {
-    initParticleBackground();
+    setupGallery();
+    setupHistoryPanel();
     const loader = document.getElementById('loader');
     const unitsContainer = document.getElementById('units');
     
+    let currentUnits = [];
+    let updateInterval;
+
+    // Function to start updates
+    function startUpdates() {
+        if (!updateInterval) {
+            updateInterval = setInterval(async () => {
+                currentUnits = await fetchAndCompareUnits(currentUnits);
+            }, 2 * 60 * 1000);
+        }
+    }
+
+    // Function to stop updates
+    function stopUpdates() {
+        if (updateInterval) {
+            clearInterval(updateInterval);
+            updateInterval = null;
+        }
+    }
+
+    // Monitor connection status
+    window.addEventListener('online', () => {
+        console.log('Connection restored');
+        startUpdates();
+    });
+
+    window.addEventListener('offline', () => {
+        console.log('Connection lost');
+        stopUpdates();
+    });
+
+    // Monitor visibility
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopUpdates();
+        } else {
+            startUpdates();
+        }
+    });
+    
     try {
-        // Show loader, hide units container
         loader.classList.remove('hidden');
         unitsContainer.style.display = 'none';
         
-        const units = await fetchUnits();
+        currentUnits = await fetchUnits();
         
         // Add event listeners for filtering and sorting
         const filterElements = ['search', 'bedrooms', 'bathrooms', 'sort'];
-        
         filterElements.forEach(elementId => {
             document.getElementById(elementId).addEventListener(
                 elementId === 'search' ? 'input' : 'change', 
-                () => displayUnits(filterAndSortUnits(units))
+                () => displayUnits(filterAndSortUnits(currentUnits))
             );
         });
 
-        // Setup popup functionality
         setupPopup();
+        displayUnits(filterAndSortUnits(currentUnits));
 
-        // Initial display
-        displayUnits(filterAndSortUnits(units));
+        // Start updates if online
+        if (navigator.onLine) {
+            startUpdates();
+        }
+
     } catch (error) {
         console.error('Error initializing:', error);
     } finally {
-        // Hide loader, show units container
         loader.classList.add('hidden');
         unitsContainer.style.display = 'grid';
     }
 }
+
+const galleryImages = [
+    'https://capi.myleasestar.com/v2/dimg-crop/115210884/1920x1080/115210884.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115210886/1920x1080/115210886.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115210882/1920x1080/115210882.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115210887/1920x1080/115210887.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115146993/1920x1080/115146993.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115146991/1920x1080/115146991.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115146980/1920x1080/115146980.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115146961/1920x1080/115146961.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115146962/1920x1080/115146962.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115146957/1920x1080/115146957.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115146956/1920x1080/115146956.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/115210885/1920x1080/115210885.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730586/1920x1080/161730586.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730570/1920x1080/161730570.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730569/1920x1080/161730569.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730568/1920x1080/161730568.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730567/1920x1080/161730567.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730565/1920x1080/161730565.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730561/1920x1080/161730561.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730556/1920x1080/161730556.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730555/1920x1080/161730555.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730554/1920x1080/161730554.jpg',
+    'https://capi.myleasestar.com/v2/dimg-crop/161730550/1920x1080/161730550.jpg'
+];
+
+function setupGallery() {
+    const galleryGrid = document.getElementById('galleryGrid');
+    const unitsGrid = document.getElementById('units');
+    const galleryButton = document.getElementById('galleryButton');
+    const popup = document.getElementById('imagePopup');
+    const popupImg = document.getElementById('popupImage');
+    const popupInfo = document.getElementById('popupInfo');
+    let currentImageIndex = 0;
+    let isGalleryView = false;
+
+    // Add keyboard navigation handler
+    function handleKeyPress(e) {
+        if (!popup.classList.contains('active') || !isGalleryView) return;
+        
+        switch(e.key) {
+            case 'ArrowLeft':
+                currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+                popupImg.src = galleryImages[currentImageIndex];
+                break;
+            case 'ArrowRight':
+                currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+                popupImg.src = galleryImages[currentImageIndex];
+                break;
+            case 'Escape':
+                popup.classList.remove('active');
+                break;
+        }
+    }
+
+    // Add keyboard event listener
+    document.addEventListener('keydown', handleKeyPress);
+
+    // Populate gallery with images
+    galleryImages.forEach((imageUrl, index) => {
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.className = 'gallery-image';
+        img.addEventListener('click', () => {
+            currentImageIndex = index;
+            popupImg.src = imageUrl;
+            popup.classList.add('active');
+            popupImg.classList.add('gallery-view');
+            popupImg.classList.remove('unit-view');
+            popupInfo.classList.remove('show-info');
+        });
+        galleryGrid.appendChild(img);
+    });
+
+    // Modify popup click handler to prevent closing when clicking the image
+    popup.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            popup.classList.remove('active');
+        }
+    });
+
+    // Toggle between gallery and units view
+    galleryButton.addEventListener('click', () => {
+        isGalleryView = !isGalleryView;
+        if (isGalleryView) {
+            unitsGrid.style.display = 'none';
+            galleryGrid.style.display = 'grid';
+            popupInfo.style.display = 'none';
+            galleryButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M120-120v-560h160v-160h400v320h160v400H520v-160h-80v160H120Zm80-80h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 480h80v-80h-80v80Zm0-160h80v-80h-80v80Z"/></svg>
+                View Units
+            `;
+        } else {
+            unitsGrid.style.display = 'grid';
+            galleryGrid.style.display = 'none';
+            popupInfo.style.display = 'block';
+            galleryButton.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24" fill="#e8eaed">
+                    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm40-80h480L560-480 440-320l-80-120-120 160Zm-40 80v-560 560Z"/>
+                </svg>
+                View Gallery
+            `;
+        }
+    });
+}
+
+
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
