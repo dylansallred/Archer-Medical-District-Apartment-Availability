@@ -1495,16 +1495,7 @@ async function init() {
             if (changes.length > 0 && lastCheckTimestamp) {
                 const lastCheck = new Date(lastCheckTimestamp);
                 const timeDiff = Math.floor((new Date() - lastCheck) / (1000 * 60)); // minutes
-                
-                showToast({
-                    type: 'added',
-                    unit: {
-                        name: 'Last Check',
-                        bedrooms: timeDiff < 60 
-                            ? `${timeDiff} minutes ago`
-                            : `${Math.floor(timeDiff / 60)} hours ${timeDiff % 60} minutes ago`
-                    }
-                });
+            
 
                 // Update history with the changes
                 updateChangeHistory(changes);
